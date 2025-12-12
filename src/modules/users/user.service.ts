@@ -1,0 +1,30 @@
+import { pool } from "../../config/db.js";
+
+
+ const getUser = async ()=>{
+    const result = await pool.query("SELECT * FROM Users");
+    return result;
+ }
+
+  const updateUser = async(name: string, email:string, id: string) => 
+{
+    const result = await pool.query(
+      `UPDATE Users SET name=$1, email=$2 WHERE id=$3 RETURNING *`,
+      [name, email, id]
+    );
+    return result;
+} 
+
+const deleteUser = async(id: string)=> {
+    const result = await pool.query(
+      `DELETE FROM Users WHERE id=$1 RETURNING *`,
+      [id]
+    );
+    return result;
+}
+
+export const userSerices = {
+    getUser,
+    updateUser,
+    deleteUser
+}
